@@ -1,11 +1,9 @@
 
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { ADD_CHAL_COMMAND, NEW_VOICE_CHANNEL_COMMAND, RENAME_CHAL_COMMAND, SOLVED_COMMAND, UNSOLVED_COMMAND } from "../commands";
 
-export const runtime = "edge";
-
 export async function GET(request: Request): Promise<Response> {
-    const { env, cf, ctx } = getRequestContext();
+    const { env, cf, ctx } = getCloudflareContext();
 
     const url = `https://discord.com/api/v10/applications/${env.DISCORD_APPLICATION_ID}/commands`;
 

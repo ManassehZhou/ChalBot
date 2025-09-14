@@ -1,10 +1,8 @@
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { InteractionResponseFlags, verifyKey } from "discord-interactions";
 import { ADD_CHAL_COMMAND, NEW_VOICE_CHANNEL_COMMAND, RENAME_CHAL_COMMAND, SOLVED_COMMAND, UNSOLVED_COMMAND } from "./commands";
 import { APIApplicationCommandInteractionDataStringOption, APIChannel, APITextChannel, ChannelType, InteractionResponseType, InteractionType, MessageFlags, RESTPatchAPIChannelJSONBody, RESTPostAPIChannelMessageJSONBody, RESTPostAPIGuildChannelJSONBody } from "discord-api-types/v10";
 import { MARKERS_TO_CHECK, MAX_CHANNEL_NAME_LENGTH, SOLVED_MARKER, UNSOLVED_MARKER } from "./const";
-
-export const runtime = "edge";
 
 // --- Helper to fetch channel details (remains the same) ---
 async function getChannel(channelId: string, env: CloudflareEnv): Promise<APIChannel | null> {
@@ -70,7 +68,7 @@ function cleanChannelName(currentName: string): string {
 
 
 export async function POST(request: Request) {
-    const { env, cf, ctx } = getRequestContext();
+    const { env, cf, ctx } = getCloudflareContext();
 
     const { isValid, interaction } = await verifyDiscordRequest(
         request,
@@ -427,7 +425,7 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request): Promise<Response> {
-    const { env, cf, ctx } = getRequestContext();
+    const { env, cf, ctx } = getCloudflareContext();
     return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`)
 }
 
